@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta property="og:title" content="タイトル">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://任意のURL">
+    <meta property="og:image" content="http://任意のURL/og_image.png">
+    <meta property="og:site_name" content="">
+    <meta property="og:description" content="" />
+    <meta property="fb:app_id" content="任意のID">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="script.js"></script>
+    <script type="application/ld+json">
+    [
+        {
+            "@context": "http://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                    "@id": "//kigiroku.com/",
+                    "name": "HOME"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                    "@id": "//kigiroku.com/frontend/",
+                    "name": "フロントエンド"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                    "@id": "//kigiroku.com/frontend/schema04.html",
+                    "name": "JSON-LD版！schema.orgで構造化データマークアップ"
+                }
+            }
+            ]
+        },
+        {
+            "@context": "http://schema.org",
+            "@type": "SoftwareSourceCode",
+            "name": "schema.org.ComputerLanguage.201702122130",
+            "description": "schema.orgのComputerLanguageをJSON-LD形式で実装してみた。",
+            "dateCreated": "2017-02-11T21:30:00Z",
+            "codeRepository": "https://github.com/ytyaru/schema.org.ComputerLanguage.201702122130",
+            "programmingLanguage": ["JSON-LD", "HTML"],
+            "runtimePlatform": "Firefox 42.0",
+            "codeSampleType": "",
+            "author": {
+              "@context": "http://schema.org",
+              "@type": "Person",
+              "name": "ytyaru",
+              "url": "https://github.com/ytyaru",
+              "sameAs": ["http://ytyaru.hatenablog.com/about"]
+            }
+        }
+    ]
+    </script>
+</head>
+<body>
+    <header role="banner"></header>
+    <nav role="navigation">
+        <ol><li><a href="">HOME</a></li><ol>
+        <form role="search"><input type="text"></form>
+    </nav>
+    <main role="main">
+        <article>
+            <section>
+                <h1>1章</h1>
+                <p></p>
+                <section>
+                    <h1>1章1節</h1>
+                    <p></p>
+                </section>
+            </section>
+            <footer role="contentinfo"><p>前</p><p>次</p></footer>
+        </article>
+        <article role="form">
+            <form>アンケート</form>
+        </article>
+        <article>
+            <section>
+                <h1>コメント</h1>
+                <p></p>
+            </section>
+        </article>
+    </main>
+    <aside role="complementary">
+        <ol><li><a href="">関連記事</a></li><ol>
+    </aside>
+    <footer role="contentinfo">
+        <p><small>&copy; 2018 ytyaru</small></p>
+        <p><small>ポリシー</small></p>
+        <p><small>免責</small></p>
+    </footer>
+</body>
+</html>
