@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Hello Server !!</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(function(){
+            $.ajax({
+                type: "GET",
+                url: "cgi-bin/now.py",
+                contentType: "application/json"
+            })
+            .done(function(response) {
+                $('datetime').text(response['now']);
+            })
+            .fail(function() {
+                alert('通信に失敗しました。');
+            });
+        });
+    </script>
+</head>
+<body>
+    <p>アクセスした日時: <datetime></datetime></p>
+</body>
+</html>
