@@ -8,7 +8,6 @@
 *.zip
 *.db
 meta_*
-memo.md
 コピー ～ *
 コピー (*
 * (コピー).*
@@ -17,4 +16,5 @@ memo.md
 old/
 #_*
 #*.7z
+#memo.md
 
