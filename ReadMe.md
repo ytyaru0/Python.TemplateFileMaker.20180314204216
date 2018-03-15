@@ -52,8 +52,9 @@ built-in|id(), int(), hex(), str(), sorted(), ...
 `py gui tk`|py/3/context/ui/g/tk/helloworld.py
 `py gui tk button`|py/3/context/ui/g/tk/button.py
 `py gui tk entry`|py/3/context/ui/g/tk/entry.py
+`py db`|py/3/context/db/sqlite/mapper.py
 `py db sqlite`|py/3/context/db/sqlite/sqlite.py
-`py db mapper`|py/3/context/db/sqlite/mapper.py
+`py db dataset`|py/3/context/db/sqlite/mapper.py
 `py http`|py/3/context/http/helloworld.py
 `py http wrapper`|py/3/context/http/wrapper.py
 `py http scrape`|py/3/context/http/scrape/helloworld.py
@@ -63,6 +64,9 @@ built-in|id(), int(), hex(), str(), sorted(), ...
 `py http server`|py/3/context/server/simple/helloworld.sh
 `py syntax`|/py/3/syntax/class.py
 `py syntax class`|/py/3/syntax/class.py
+`py designpattern`|py/3/designpattern/singleton.py
+`py singleton`|py/3/designpattern/singleton.py
+`py test`|py/3/context/test/test.py
 
 # 開発環境
 
