@@ -14,10 +14,6 @@ python3 TemplateFileMaker.py
 ```sh
 python3 TemplateFileMaker.py {path} {ext} {category1} {category2} {category3} ...
 ```
-```sh
-python3 TemplateFileMaker.py {path} {lang} {context} {syntax} ...
-```
-
 ## 位置引数
 
 i|略|意味
@@ -26,11 +22,11 @@ i|略|意味
 1|{ext}|対象ファイルタイプ
 2..|{category}|テンプレートタイプ。順序は階層をあわらす
 
-### {lang}
+### {ext}
 
 * py, sh, md, js, html, css, cs, ...
 
-バージョンによる言語の違いもある。どうするか。
+拡張子。プログラミング言語。バージョンによる言語の違いもある。どうするか。
 
 ### {category}
 
