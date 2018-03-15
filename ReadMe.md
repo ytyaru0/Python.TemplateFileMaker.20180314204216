@@ -12,7 +12,10 @@
 python3 TemplateFileMaker.py
 ```
 ```sh
-python3 TemplateFileMaker.py {path} {ext} {category} {category} {category} ...
+python3 TemplateFileMaker.py {path} {ext} {category1} {category2} {category3} ...
+```
+```sh
+python3 TemplateFileMaker.py {path} {lang} {context} {syntax} ...
 ```
 
 ## 位置引数
@@ -22,6 +25,22 @@ i|略|意味
 0|{path}|対象ファイルのフルパス
 1|{ext}|対象ファイルタイプ
 2..|{category}|テンプレートタイプ。順序は階層をあわらす
+
+### {lang}
+
+* py, sh, md, js, html, css, cs, ...
+
+バージョンによる言語の違いもある。どうするか。
+
+### {category}
+
+#### {category1}
+
+{category1}|値
+-----------|--
+context|HTTP, DB, Server, ...
+syntax|if, for, var, func, class, ...
+built-in|id(), int(), hex(), str(), sorted(), ...
 
 # 開発環境
 
