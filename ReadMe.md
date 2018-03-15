@@ -38,6 +38,32 @@ context|HTTP, DB, Server, ...
 syntax|if, for, var, func, class, ...
 built-in|id(), int(), hex(), str(), sorted(), ...
 
+#### コマンドと対応ファイルの例
+
+コマンド|対応ファイル
+--------|------------
+`py`|py/3/context/ui/c/helloworld.py
+`py2`|py/2/context/ui/c/helloworld.py
+`py cui`|py/3/context/ui/c/main.py
+`py cui args`|py/3/context/ui/c/args.py
+`py cui main`|py/3/context/ui/c/main.py
+`py cui parse`|py/3/context/ui/c/parse.py
+`py gui`|py/3/context/ui/g/tk/helloworld.py
+`py gui tk`|py/3/context/ui/g/tk/helloworld.py
+`py gui tk button`|py/3/context/ui/g/tk/button.py
+`py gui tk entry`|py/3/context/ui/g/tk/entry.py
+`py db sqlite`|py/3/context/db/sqlite/sqlite.py
+`py db mapper`|py/3/context/db/sqlite/mapper.py
+`py http`|py/3/context/http/helloworld.py
+`py http wrapper`|py/3/context/http/wrapper.py
+`py http scrape`|py/3/context/http/scrape/helloworld.py
+`py http server`|py/3/context/server/simple/
+`py http server cgi`|py/3/context/server/cgi/
+`py http server api`|py/3/context/server/api/
+`py http server`|py/3/context/server/simple/helloworld.sh
+`py syntax`|/py/3/syntax/class.py
+`py syntax class`|/py/3/syntax/class.py
+
 # 開発環境
 
 * [Raspberry Pi](https://ja.wikipedia.org/wiki/Raspberry_Pi) 3 Model B
