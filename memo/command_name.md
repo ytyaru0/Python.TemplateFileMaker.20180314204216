@@ -45,6 +45,18 @@ $ do py cui
 
 3はディレクトリ構成から自動割当される。それを元に手動で短縮形に変えていく。
 
+KeyValue形式。TABをメタ文字とする。
+
+commands.tsv
+```
+py/3/context/ui/c/_ALL.py   py cui
+py/3/context/ui/c/_MIN.py   py cui min
+py/3/context/ui/c/main.py   py cui main
+py/3/context/ui/c/args.py   py cui args
+py/3/context/ui/c/shell.py  py cui shell
+...
+```
+
 ### テンプレ識別子
 
 要素|例
@@ -69,4 +81,12 @@ name|意味
 ----|----
 _MIN|最小テンプレ
 _ALL|最大テンプレ, MAX, FULL
+
+コマンドを省略したときのテンプレを指定できる。
+
+`$ py cui` としたとき、`_ALL.py`を使いたい。
+
+* py/3/context/ui/c/_ALL.py
+* py/3/context/ui/c/_MIN.py
+
 
