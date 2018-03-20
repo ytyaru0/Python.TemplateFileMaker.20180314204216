@@ -89,4 +89,9 @@ _ALL|最大テンプレ, MAX, FULL
 * py/3/context/ui/c/_ALL.py
 * py/3/context/ui/c/_MIN.py
 
+## 候補と補完
+
+https://qiita.com/sosuke/items/06b64068155ae4f8a853
+
+complete, compgen コマンド。
 
