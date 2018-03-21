@@ -1,5 +1,6 @@
 import pathlib
 import os.path
+from CommandsFileMaker import CommandsFileMaker
 class CommandsFileLoader:
     def __init__(self):
         self.__path_dir_root = pathlib.Path(__file__).resolve().parent.parent
@@ -12,6 +13,7 @@ class CommandsFileLoader:
     def TemplateDir(self): return self.__path_dir_res
     
     def Load(self):
+        CommandsFileMaker().Make()
         import collections
         CommandsFile = collections.namedtuple('CommandsFile', 'path commands')
         data = []

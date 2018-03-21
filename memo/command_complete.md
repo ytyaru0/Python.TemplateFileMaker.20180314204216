@@ -8,3 +8,14 @@ doコマンド保管用.shファイルを/tmp/work/.meta/flow/do/complete.shに�
 doコマンドはこのファイルを source として読み込むと入力補完できる。
 
 complete.shはpythonプログラムで作成する。
+
+入力コマンド|候補
+------------|----
+`do`|[do, domainname, done, dosfsck, dosfslabel, dotlockfile]
+`do<SPACE>`|[html, py, md]
+`do ht`|[html, py, md]
+`do html`|[html, py, md]
+`do html<SPACE>`|[context, syntax]
+`do html co`|[context, syntax]
+`do ht`|[html, py, md]
+

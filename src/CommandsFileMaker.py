@@ -12,8 +12,8 @@ class CommandsFileMaker:
     def TemplateDir(self): return self.__path_dir_res
     
     def Make(self):
+        if self.__path_file_commands.is_file(): return
         temps = self.__LoadTemplateFiles()
-        path = self.__path_dir_res / 'commands.tsv'
         with self.__path_file_commands.open('w', encoding='utf-8') as f:
             for t in temps:
                 f.write(t + '\t' + self.__MakeCommand(t) + '\n')
