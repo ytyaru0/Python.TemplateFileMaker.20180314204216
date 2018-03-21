@@ -38,10 +38,13 @@ class CommandsFile:
                 if 0 == len(line.strip()): continue
                 if line.strip().startswith('#'): continue
                 s = line.split('\t')
-                #data.append(CommandsFile(path=s[0], commands=s[1:]))
-                data.append(CommandsFile(path=s[0], commands=self.__MakeCommands(s[1:])))
+                data.append(CommandsFile(path=s[0], commands=s[1:]))
+                #data.append(CommandsFile(path=s[0], commands=self.__MakeCommands(s[1:])))
         return data
+    """
     def __MakeCommands(self, commands):
         res = []
         for c in commands: res.append(self.__p2c.To(c))
         return res
+    """
+
