@@ -15,7 +15,7 @@ meta_*
 * (*番目のコピー).*
 old/
 *.swp
-*.tsv
+#*.tsv
 #_*
 #*.7z
 #memo.md
