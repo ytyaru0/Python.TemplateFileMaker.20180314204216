@@ -1,7 +1,6 @@
 import pathlib
 import os.path
 import csv
-#from PathToCommand import PathToCommand
 class ConfigFile:
     def __init__(self, file_name):
         self.__path_dir_root = pathlib.Path(__file__).resolve().parent.parent
@@ -9,7 +8,6 @@ class ConfigFile:
         if file_name.endswith('.tsv'): self.__file_name = file_name
         else: self.__file_name = file_name + '.tsv'
         self.__LoadCommandsDirPathFromMetaFile()
-        #self.__p2c = PathToCommand()
     
     @property
     def FilePath(self): return self.__path_file_this
