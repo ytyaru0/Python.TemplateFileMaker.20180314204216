@@ -47,11 +47,29 @@ py/3/Context/ui/g/tk/button.py	py gui tk button
 py/3/Context/ui/g/tk/entry.py	py gui tk entry
 py/3/Context/ui/g/tk/helloworld.py	py gui tk helloworld
 py/3/DesignPattern/singleton.py	py DesignPattern singleton
-py/3/Syntax/arguments.py	py Syntax arguments
-py/3/Syntax/class.py	py Syntax class
+py/3/Lib/__pycache__/re.cpython-36.pyc	py Lib __pycache__ re.cpython-36
+py/3/Lib/regex.py	py Lib regex
+py/3/Syntax/built-in/list.py	py Syntax built-in list
+py/3/Syntax/class/abstractmethod.py	py Syntax class abstractmethod
+py/3/Syntax/class/class.py	py Syntax class class
+py/3/Syntax/class/classmethod.py	py Syntax class classmethod
+py/3/Syntax/class/descriptor.py	py Syntax class descriptor
+py/3/Syntax/class/metaclass.py	py Syntax class metaclass
+py/3/Syntax/class/name_mangling.py	py Syntax class name_mangling
+py/3/Syntax/class/namedtuple.py	py Syntax class namedtuple
+py/3/Syntax/class/property.py	py Syntax class property
+py/3/Syntax/class/property_function.py	py Syntax class property_function
+py/3/Syntax/class/staticmethod.py	py Syntax class staticmethod
+py/3/Syntax/class/type.py	py Syntax class type
+py/3/Syntax/comprehension.py	py Syntax comprehension
 py/3/Syntax/for.py	py Syntax for
+py/3/Syntax/format.py	py Syntax format
+py/3/Syntax/function/arguments.py	py Syntax function arguments
+py/3/Syntax/function/decorator.py	py Syntax function decorator
+py/3/Syntax/function/lambda.py	py Syntax function lambda
 py/3/Syntax/if.py	py Syntax if
-py/3/Syntax/metaclass.py	py Syntax metaclass
+py/3/Syntax/operator.py	py Syntax operator
+py/3/Syntax/slice.py	py Syntax slice
 py/3/Syntax/try.py	py Syntax try
 py/3/helloworld.py	py helloworld
 sh/Context/argument.sh	sh Context argument

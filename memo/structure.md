@@ -6,13 +6,17 @@
             * do
     * py/
         * os/file/
+            * NameGenerator.py
         * _command/
             * do/
-                * CommandReplaceFile.py
-                * CommandsFile.py
-                * GetCompleteCandidate.py
-                * GetTemplateFilePath.py
-                * PathToCommand.py
+                * TemplateMaker/
+                    * CommandReplaceFile.py
+                    * CommandsFile.py
+                    * GetCompleteCandidate.py
+                    * GetTemplateFilePath.py
+                    * PathToCommand.py
+                    * config/
+                        * command_replace.tsv
             * pj/
             * repo/
 
@@ -46,4 +50,48 @@
 
 と思ったが、command_replace.tsv は手書き。自動作成できない。
 py/_command/do/ 配下にコードと一緒に配置するか。/tmp/work/.meta/ に存在しなければコピーして、そっちを読むようにする。
+
+# TSVファイルの必要性
+
+## commands.tsv
+
+テンプレートファイルをすべて捜査する回数を減らせる。
+
+RAMディスクに配置したら、doコマンド初回利用時にのみ実行される。
+ファイルがなければ、doコマンドでTABキー2回押下するたびに、テンプレートファイルをすべて探さねばならない。コマンド文字列の作成も。
+
+## command_replace.tsv
+
+冗長なコマンドを置き換える。
+
+ファイルの分類を最適化するためにディレクトリ構造やファイル名を定める。だが、コマンド入力時、その構造そのままだと都合が悪いことがある。冗長など。
+
+# TSVファイル設定
+
+config.ini
+
+```ini
+[file]
+paths=
+    /tmp/work/.meta/_command/do
+    ./config
+```
+
+```python
+import configparser
+p = configparser.ConfigParser()
+p.read('config.ini')
+print(p['file']['paths'].split('\n'))
+
+paths = filter(lambda line: line is not None and 0 < len(line.strip()), p['file']['paths'].split('\n')) 
+print(list(paths))
+```
+
+config.yml
+
+```yml
+path:
+    - /tmp/work/.meta/_command/do/
+    - ./config/
+```
 
