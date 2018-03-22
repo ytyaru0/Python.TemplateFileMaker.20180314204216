@@ -1,6 +1,5 @@
 import pathlib
 import os.path
-#from CommandsFileLoader import CommandsFileLoader
 from CommandsFile import CommandsFile 
 class GetCompleteCandidate:
     def __init__(self, root_command):
@@ -14,7 +13,6 @@ class GetCompleteCandidate:
         self.__comp_line = comp_line
         self.__comp_point = comp_point
         return self.__GetCandidate(CommandsFile().Load())
-        #return self.__GetCandidate(CommandsFileLoader().Load())
     
     # 現在の階層における候補リストを返す
     def __GetCandidate(self, datas):

@@ -6,9 +6,7 @@ class CommandsFile:
         self.__path_dir_root = pathlib.Path(__file__).resolve().parent.parent
         self.__path_dir_res = self.__path_dir_root / 'res'
         self.__file_name = 'commands.tsv'
-        #self.__path_file_commands = self.__path_dir_res / 'commands.tsv'
         #self.__path_file_commands = self.__path_dir_res / self.__file_name
-        #self.__path_file_commands = pathlib.Path('/tmp/work/.meta/_command/do/commands.tsv')
         self.__LoadConfigFile()
         self.__p2c = PathToCommand()
     @property
@@ -29,10 +27,7 @@ class CommandsFile:
             p.read(path_config)
             path_file_commands = pathlib.Path(p['Paths']['work_meta_command_do']) / self.__file_name
             path_file_commands.parent.mkdir(parents=True, exist_ok=True)
-            #print('**************************')
-            #return path_file_commands.resolve()
             return path_file_commands
-            #if path_file_commands.is_file(): return path_file_commands
         return None
  
     def Make(self):
@@ -44,9 +39,7 @@ class CommandsFile:
 
     def __LoadTemplateFiles(self):
         files = []
-        #root = pathlib.Path(__file__).resolve().parent.parent / 'res'
         for path in self.__path_dir_res.glob('*/**/*.*'):
-            #if path.name == self.__path_file_commands.name: continue
             files.append(str(path.relative_to(self.__path_dir_res)))
         files.sort()
         return files

@@ -6,7 +6,6 @@ if __name__ == '__main__':
     f = CommandsFile()
     #print(input_command)
     for d in f.Load():
-        #print('***************')
         for c in d.commands:
             #print('*'+c)
             if c == input_command:
