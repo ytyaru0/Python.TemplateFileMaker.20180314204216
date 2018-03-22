@@ -1,7 +1,7 @@
 import pathlib
 import os.path
 import csv
-from PathToCommand import PathToCommand
+#from PathToCommand import PathToCommand
 class ConfigFile:
     def __init__(self, file_name):
         self.__path_dir_root = pathlib.Path(__file__).resolve().parent.parent
@@ -9,20 +9,26 @@ class ConfigFile:
         if file_name.endswith('.tsv'): self.__file_name = file_name
         else: self.__file_name = file_name + '.tsv'
         self.__LoadCommandsDirPathFromMetaFile()
-        self.__p2c = PathToCommand()
+        #self.__p2c = PathToCommand()
     
     @property
     def FilePath(self): return self.__path_file_this
     @property
     def TemplateDir(self): return self.__path_dir_template
-    
+    @property
+    def DefaultFilePath(self): return self.__path_dir_res / self.__file_name
+
     def __LoadCommandsDirPathFromMetaFile(self):
         work_paths = self.__LoadMetaPath('work')
         root_paths = self.__LoadMetaPath('root')
         if work_paths is None: self.__path_file_this = self.__path_dir_res / self.__file_name
         else: self.__path_file_this = pathlib.Path(work_paths['work_meta_command_do']) / self.__file_name
         if root_paths is None: self.__path_dir_template = self.__path_dir_res
-        else: self.__path_dir_template = pathlib.Path(root_paths['root_db_template'])
+        else:
+            self.__path_dir_template = pathlib.Path(root_paths['root_db_template'])
+            if not self.__path_dir_template.is_dir():
+                self.__path_dir_template = self.__path_dir_res
+        self.__path_file_this.parent.mkdir(parents=True, exist_ok=True)
 
     def __LoadMetaPath(self, file_name):
         path_config = pathlib.Path('/tmp/work/RaspberryPi.Home.Root.20180318143826/src/_meta/path/ini/{}.ini'.format(file_name))
