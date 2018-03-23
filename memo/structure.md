@@ -3,6 +3,7 @@
 * ~/.bashrc
     * python3 ~/root/script/_meta/path/IniToSh.py
     * . ~/root/script/_meta/path/sh/paths.sh
+    * . setup_complete_candidate_do.sh
 * ~/root/script/
     * _meta/
         * path/
@@ -12,6 +13,10 @@
             * sh/
                 * paths.sh
             * IniToSh.py
+        * command/
+            * setup_complete_candidate_do.sh
+            * setup_complete_candidate_pj.sh
+            * setup_complete_candidate_repo.sh
     * sh/
         * _command/
             * do
