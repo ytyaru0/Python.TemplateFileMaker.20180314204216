@@ -17,26 +17,15 @@ class ConfigFile:
     def DefaultFilePath(self): return self.__path_dir_res / self.__file_name
 
     def __LoadCommandsDirPathFromMetaFile(self):
-        #work_paths = self.__LoadMetaPath('work')
-        #root_paths = self.__LoadMetaPath('root')
         work_paths = self.__LoadMetaPath('work')
         root_paths = self.__LoadMetaPath('root')
         self.__path_file_this = pathlib.Path(work_paths['work_meta_command_do']) / self.__file_name
         self.__path_dir_template = pathlib.Path(root_paths['root_db_template']) / self.__file_name
-        """
-        if not self.__path_file_this.is_file():
-            self.__path_file_this = self.__path_dir_res / self.__file_name
-        self.__path_dir_template = pathlib.Path(root_paths['root_db_template'])
-        if not self.__path_dir_template.is_dir():
-            self.__path_dir_template = self.__path_dir_res
-        """
         if not self.__path_dir_template.is_dir():
             self.__path_dir_template = self.__path_dir_res
         self.__path_file_this.parent.mkdir(parents=True, exist_ok=True)
 
     def __LoadMetaPath(self, file_name):
-        #path_config = pathlib.Path('~/root/_meta/_meta/path/ini/{}.ini'.format(file_name))
-        #path_config = pathlib.Path('/tmp/work/RaspberryPi.Home.Root.20180318143826/src/_meta/path/ini/{}.ini'.format(file_name))
         path_config = self.__GetMetaPath(file_name)
         import configparser
         p = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
