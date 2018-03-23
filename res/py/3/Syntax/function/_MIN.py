@@ -1,0 +1,2 @@
+def ${Name}():
+    print('A')
