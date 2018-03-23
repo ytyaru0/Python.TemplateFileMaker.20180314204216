@@ -17,24 +17,39 @@ class ConfigFile:
     def DefaultFilePath(self): return self.__path_dir_res / self.__file_name
 
     def __LoadCommandsDirPathFromMetaFile(self):
+        #work_paths = self.__LoadMetaPath('work')
+        #root_paths = self.__LoadMetaPath('root')
         work_paths = self.__LoadMetaPath('work')
         root_paths = self.__LoadMetaPath('root')
-        if work_paths is None: self.__path_file_this = self.__path_dir_res / self.__file_name
-        else: self.__path_file_this = pathlib.Path(work_paths['work_meta_command_do']) / self.__file_name
-        if root_paths is None: self.__path_dir_template = self.__path_dir_res
-        else:
-            self.__path_dir_template = pathlib.Path(root_paths['root_db_template'])
-            if not self.__path_dir_template.is_dir():
-                self.__path_dir_template = self.__path_dir_res
+        self.__path_file_this = pathlib.Path(work_paths['work_meta_command_do']) / self.__file_name
+        self.__path_dir_template = pathlib.Path(root_paths['root_db_template']) / self.__file_name
+        """
+        if not self.__path_file_this.is_file():
+            self.__path_file_this = self.__path_dir_res / self.__file_name
+        self.__path_dir_template = pathlib.Path(root_paths['root_db_template'])
+        if not self.__path_dir_template.is_dir():
+            self.__path_dir_template = self.__path_dir_res
+        """
+        if not self.__path_dir_template.is_dir():
+            self.__path_dir_template = self.__path_dir_res
         self.__path_file_this.parent.mkdir(parents=True, exist_ok=True)
 
     def __LoadMetaPath(self, file_name):
-        path_config = pathlib.Path('/tmp/work/RaspberryPi.Home.Root.20180318143826/src/_meta/path/ini/{}.ini'.format(file_name))
-        if path_config.is_file():
-            import configparser
-            p = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
-            p.read(path_config)
-            return p['Paths']
+        #path_config = pathlib.Path('~/root/_meta/_meta/path/ini/{}.ini'.format(file_name))
+        #path_config = pathlib.Path('/tmp/work/RaspberryPi.Home.Root.20180318143826/src/_meta/path/ini/{}.ini'.format(file_name))
+        path_config = self.__GetMetaPath(file_name)
+        import configparser
+        p = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
+        p.read(path_config)
+        return p['Paths']
+
+    def __GetMetaPath(self, file_name):
+        paths = ['~/root/_meta/_meta/path/ini/', 
+            '/tmp/work/RaspberryPi.Home.Root.20180318143826/src/_meta/path/ini/']
+        for path in paths:
+            path = pathlib.Path(path) / '{}.ini'.format(file_name)
+            if path.is_file(): return path
+        raise Exception('{}.iniファイルが存在しません。次のいずれかのディレクトリ配下に作成してください'.format(file_name))
         return None
 
     def LoadTsv(self):

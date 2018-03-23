@@ -8,6 +8,7 @@ class CommandsFile(ConfigFile):
         self.__p2c = PathToCommand()
 
     def Make(self):
+        if self.FilePath.is_file(): return
         temps = self.__LoadTemplateFiles()
         with self.FilePath.open('w', encoding='utf-8') as f:
             for t in temps:

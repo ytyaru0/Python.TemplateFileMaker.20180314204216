@@ -1,6 +1,17 @@
 # 構造
 
+* ~/.bashrc
+    * python3 ~/root/script/_meta/path/IniToSh.py
+    * . ~/root/script/_meta/path/sh/paths.sh
 * ~/root/script/
+    * _meta/
+        * path/
+            * ini/
+                * root.ini
+                * work.ini
+            * sh/
+                * paths.sh
+            * IniToSh.py
     * sh/
         * _command/
             * do
