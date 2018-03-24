@@ -14,9 +14,13 @@
                 * paths.sh
             * IniToSh.py
         * command/
-            * setup_complete_candidate_do.sh
-            * setup_complete_candidate_pj.sh
-            * setup_complete_candidate_repo.sh
+            * do/
+                * setup_complete_candidate.sh
+                * template_augs.ini
+            * pj/
+                * setup_complete_candidate_pj.sh
+            * repo/
+                * setup_complete_candidate_repo.sh
     * sh/
         * _command/
             * do

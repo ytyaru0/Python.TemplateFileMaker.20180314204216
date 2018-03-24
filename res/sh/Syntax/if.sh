@@ -1,4 +1,7 @@
 [ 1 ] && echo 1
+[ 1 ] && { echo -n 1; echo 2; }
+[ 1 ] && [ 2 ] && { echo -n 1; echo 2; }
+[ 1 ] || [ 2 ] && { echo -n 1; echo 2; }
 
 if [ 1 ]; then
     echo 2
