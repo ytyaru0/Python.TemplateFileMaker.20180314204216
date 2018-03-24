@@ -1,5 +1,6 @@
 import pathlib
 import os.path
+from io import StringIO
 from PathToCommand import PathToCommand
 from ConfigFile import ConfigFile
 class CommandsFile(ConfigFile):
@@ -9,11 +10,12 @@ class CommandsFile(ConfigFile):
 
     def Make(self):
         if self.FilePath.is_file(): return
-        temps = self.__LoadTemplateFiles()
-        with self.FilePath.open('w', encoding='utf-8') as f:
-            for t in temps:
-                f.write(t + '\t' + self.__p2c.To(t) + '\n')
-
+        with StringIO() as buf:
+            for t in self.__LoadTemplateFiles():
+                buf.write(t + '\t' + self.__p2c.To(t) + '\n')
+            with self.FilePath.open('w', encoding='utf-8') as f:
+                f.write(buf.getvalue())
+    
     def __LoadTemplateFiles(self):
         files = []
         for path in self.TemplateDir.glob('*/**/*.*'):
