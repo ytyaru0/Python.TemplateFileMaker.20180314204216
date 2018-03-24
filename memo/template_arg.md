@@ -394,6 +394,102 @@ prefix|意味
 
 -,$系引数は、カテゴリの前にすべき。
 
+# 既存テンプレエンジン参考
+
+* include, extends, mixin
+    * https://necosystem.hirokihomma.com/archives/121/
+* jinja2
+    * http://www.python.ambitious-engineer.com/archives/760
+
+## include
+
+./template1.py
+```
+<% include template2.py %>
+if __name__ == '__main__':
+    pass
+```
+
+./template2.py
+```
+class <% 0 %>: pass
+```
+
+./template1.py の結果は以下。
+```
+class <% 0 %>: pass
+if __name__ == '__main__':
+    pass
+```
+
+```sh
+$ do py -MyClass
+```
+```python
+class MyClass: pass
+if __name__ == '__main__':
+    pass
+```
+
+## extends
+
+./template1.py
+```
+class <% 0 %>: pass
+```
+
+./template2.py
+```
+<% extends template1.py %>
+<% 0 %> MyClass
+```
+
+```sh
+$ do py
+```
+
+出力結果
+```
+class MyClass: pass
+```
+
+変数の値をセットする。コマンド入力でなくテンプレファイルに。
+
+## mixin
+
+py_class.mixin
+```
+<% mixin Class(name) %>
+class <% name %>: pass
+```
+
+./template1.py
+```
+<% include py_class.mixin %>
+%Class('MyClass1')
+%Class('MyClass2')
+%Class('<% 0 %>')
+```
+
+展開結果。
+```
+class MyClass1: pass
+class MyClass2: pass
+class <% 0 %>: pass
+```
+
+```sh
+$ do py AAA
+```
+
+展開結果。
+./template1.py
+```
+class MyClass1: pass
+class MyClass2: pass
+class AAA: pass
+```
+
 # 蛇足
 
 以下。蛇足。考えた経緯。ボツ案。
@@ -444,4 +540,3 @@ $ do sql insert columns $$./param.tsv
 ```
 
 不要か。テンプレートは一度に繰り返し同じものを量産するのは本意ではない。
-

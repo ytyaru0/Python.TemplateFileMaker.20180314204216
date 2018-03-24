@@ -10,12 +10,15 @@ class Template:
     def __AnalizeVars(self):
         pass
 
+# include, extends, mixin
+# https://necosystem.hirokihomma.com/archives/121/
 # <% 0 %>
 # <% Name %>
 # <% Name:Default %>
 # <% %Y年%m月%d日 %>
 # <% py/Context/db/_DEFAULT.py %>
-# <% py/Context/db/_DEFAULT.py:%{0} %{Name} %>
+# <% py/Context/db/_DEFAULT.py:%{0}AAA %{Name}BBB %>
+# 
 # PlaceHolderに囲まれた内容のうち : で分割される場合がある。
 # これを左辺と右辺に分ける。
 class PlaceHolderContent:
