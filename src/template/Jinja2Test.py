@@ -1,0 +1,15 @@
+from jinja2 import Template, Environment, FileSystemLoader
+import pathlib
+import datetime
+
+path_tpl = (pathlib.Path(__file__).parent.parent.parent / 'res').resolve()
+env = Environment(loader=FileSystemLoader(str(path_tpl )))
+template = env.get_template('md/artifact_1.md')
+print(template.render(Desctiption="説明文。", RepoUrl='http://', e='ras_py', l='CC0-1.0'))
+
+template = env.get_template('md/artifact_2.md')
+print(template.render(Title='記事のタイトル', Date='{0:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now()), Desctiption="説明文。", RepoUrl='http://', e='ras_py', l='CC0-1.0'))
+
+
+
+
