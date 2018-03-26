@@ -60,7 +60,7 @@ class ConfigFile:
                 if columns[0].strip().startswith('#'): continue
                 yield columns
 
-
+"""
 if __name__ == '__main__':
     c = ConfigFile('commands')
     print(c.FilePath)
@@ -69,3 +69,5 @@ if __name__ == '__main__':
     c = ConfigFile('command_replace')
     print(c.FilePath)
     print(c.TemplateDir)
+"""
+
