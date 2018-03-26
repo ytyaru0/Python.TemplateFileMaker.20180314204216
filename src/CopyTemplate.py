@@ -18,8 +18,6 @@ class CopyTemplate:
     def __CommandToTemplate(self):
         categolies, tpl_var_dict = TemplateVarsArgumentAnalizer(self.__tpl_var_prefix).Analize(self.__commands)
         path = self.__CommandToTemplatePath(categolies)
-        print(str(self.__cmdfile.TemplateDir))
-        print(path)
         env = Environment(loader=FileSystemLoader(str(self.__cmdfile.TemplateDir)))
         template = env.get_template(path)
         try:
@@ -42,19 +40,18 @@ class CopyTemplate:
         with pathlib.Path(template.filename).open() as f:
             source = f.read()
             includes = TemplateIncludeFiles(self.__cmdfile.TemplateDir, env).Get(source)
-            #print('INCLUDES:', includes)
             print('テンプレート変数が不足しています。')
             print('たとえば以下のように入力してください。')
             tpl_var_names = sorted(meta.find_undeclared_variables(env.parse(source)), key=str.lower)
             print('$ do', ' '.join(categolies), self.__GetExampleCommand(tpl_var_names, includes))
             print('テンプレート変数は以下のコマンドで指定します。')
-            #print(tpl_var_names)
             print(' '.join([self.__tpl_var_prefix + v for v in tpl_var_names ]))
             if 0 < len(includes):
                 print('include用テンプレ引数とその値の候補は以下のとおり。')
                 for i in includes:
                     print(self.__tpl_var_prefix+i[0], i[1])
-                return includes
+            print('対象テンプレートは以下です。')
+            print(template.filename)
 
     def __GetExampleCommand(self, tpl_var_names, includes):
         command = ''
@@ -128,8 +125,7 @@ class TemplateIncludeFiles:
     def Get(self, source:str):
         token_gen = self.__env.lex(self.__env.preprocess(source))
         tokens = list(token_gen)
-        #return self.GetIncludeCandidates(tokens, self.GetBlockContentIndices(tokens))
-        return sorted(self.GetIncludeCandidates(tokens, self.GetBlockContentIndices(tokens)), key=lambda i: i[0])
+        return sorted(self.GetIncludeCandidates(tokens, self.GetBlockContentIndices(tokens)), key=lambda i: i[0].lower())
            
     def GetBlockContentIndices(self, tokens):
         block_indices = []
@@ -145,7 +141,6 @@ class TemplateIncludeFiles:
                     start = i 
                     block_indices.append([start, -1])
                     continue
-        print(block_indices)
         return block_indices
 
     def GetIncludeCandidates(self, tokens, block_indices):
@@ -184,8 +179,7 @@ class TemplateIncludeFiles:
         for path in self.__tpl_dir.glob(pattern):
             p = path.relative_to(pattern_full)
             values.append(str(p.parent / p.stem))
-        #return values
-        return sorted(values)
+        return sorted(values, key=str.lower)
 
 
 if __name__ == '__main__':
