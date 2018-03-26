@@ -31,11 +31,18 @@ class CopyTemplate:
         raise Exception('コマンドに対応するテンプレートファイルパスが見つかりません。\n  command=\'{}\'\n  参照ファイル:{}'.format(' '.join(self.__commands), self.__cmdfile.FilePath))
 
     def GetTemplateVars(self):
-        categolies, tpl_var_dict = TemplateVarsArgumentAnalizer().Analize(command)
+        categolies, tpl_var_dict = TemplateVarsArgumentAnalizer().Analize(self.__commands)
         path = self.__CommandToTemplatePath(categolies)
         env = Environment(loader=FileSystemLoader(str(self.__cmdfile.TemplateDir)))
         template = env.get_template(path)
         with pathlib.Path(template.filename).open() as f:
+             
+            #msg = TemplateErrorMessage(env)
+            #print(msg.Get(f.read()))
+            #includes = TemplateIncludeFiles(env).Get(f.read())
+            includes = TemplateIncludeFiles(self.__cmdfile.TemplateDir, env).Get(f.read())
+            print('INCLUDES:', includes)
+
             ast = env.parse(f.read())
             return meta.find_undeclared_variables(ast)
 
@@ -93,8 +100,81 @@ class TemplateVarsArgumentAnalizer:
         if index+1 == len(tpl_vars): return True
         else: return False
 
+import jinja2
+class TemplateIncludeFiles:
+    def __init__(self, tpl_dir:pathlib.Path, env:jinja2.Environment):
+        self.__tpl_dir = tpl_dir
+        self.__env = env
+
+    def Get(self, source:str):
+        token_gen = self.__env.lex(self.__env.preprocess(source))
+        tokens = list(token_gen)
+        return self.GetIncludeCandidates(tokens, self.GetBlockContentIndices(tokens))
+           
+    def GetBlockContentIndices(self, tokens):
+        block_indices = []
+        start = -1
+        for i, t in enumerate(tokens):
+            if -1 != start:
+                if t[1] == 'block_end':
+                    block_indices[-1][1] = i
+                    start = -1
+                    continue
+            else:
+                if t[1] == 'block_begin':
+                    start = i 
+                    block_indices.append([start, -1])
+                    continue
+        print(block_indices)
+        return block_indices
+
+    def GetIncludeCandidates(self, tokens, block_indices):
+        values = []
+        for rng in block_indices:
+            start = rng[0] + self.GetIncludeValueInde(tokens[rng[0]:rng[1]])
+            if -1 == start: continue
+            values.append(self.GetIncludeValuePattern(tokens[start+1:rng[1]-1]))
+        return values
+
+    def GetIncludeValueInde(self, block_tokens):
+        for i, token in enumerate(block_tokens):
+            if token[1] == 'name':
+                # {% block で見つかった最初の name構文 の値が include なら真
+                if token[2] == 'include': return i
+                # {% block では 変数なども name構文である。includeという名の変数もありうるが、最初にきているかどうかで変数かどうか判断できる
+                else: return -1
+        return -1
+
+    def GetIncludeValuePattern(self, include_value_tokens:list):
+        name = None
+        value = ''
+        for i, token in enumerate(include_value_tokens):
+            if 'string' == token[1]: value += token[2][1:-1]
+            elif 'name' == token[1]:
+                if name is None:
+                    name = token[2]
+                    value += '**/*'
+                else: raise Exception('includeブロック {% include %} の値に2つ以上の テンプレ変数 {{}} を使っています。ひとつだけにしてください。')
+        return name, self.__GetPatternValues(value)
+
+    def __GetPatternValues(self, pattern):
+        pattern_parent = pathlib.PurePath(pattern).parent.parent
+        pattern_full = self.__tpl_dir / pattern_parent
+        values = []
+        for path in self.__tpl_dir.glob(pattern):
+            p = path.relative_to(pattern_full)
+            values.append(str(p.parent / p.stem))
+        return values
+
 
 if __name__ == '__main__':
     import sys
     if len(sys.argv) < 3: raise Exception('起動引数エラー。コマンド文字列と出力先ファイルのフルパスをください。')
-    CopyTemplate(sys.argv[1:-1], sys.argv[-1]).Copy()
+    c = CopyTemplate(sys.argv[1:-1], sys.argv[-1])
+    try:
+        c.Copy()
+        print(c.GetTemplateVars())
+    except:
+        import traceback
+        traceback.print_exec()
+
