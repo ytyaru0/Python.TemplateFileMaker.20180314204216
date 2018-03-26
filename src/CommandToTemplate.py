@@ -38,7 +38,7 @@ class CommandToTemplate:
             source = f.read()
             includes = TemplateIncludeFiles(self.__cmdfile.TemplateDir, env).Get(source)
             print('****************************************')
-            print('テンプレート変数が不足しています。')
+            print('テンプレート変数が不足しているか誤りがあります。')
             print('たとえば以下のように入力してください。\n')
             tpl_var_names = sorted(meta.find_undeclared_variables(env.parse(source)), key=str.lower)
             print('$ do', ' '.join(categolies), self.__GetExampleCommand(tpl_var_names, includes) + '\n')
