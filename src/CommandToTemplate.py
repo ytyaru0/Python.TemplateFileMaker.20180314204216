@@ -5,19 +5,10 @@ from jinja2 import Template, Environment, FileSystemLoader, meta
 from CommandsFile import CommandsFile
 
 class CommandToTemplate:
-#class CopyTemplate:
     def __init__(self, commands:list):
-    #def __init__(self, commands:list, filepath:str):
         self.__commands = commands
-        #self.__filepath = filepath
         self.__cmdfile = CommandsFile()
         self.__tpl_var_prefix = '-'
-
-    """
-    def Copy(self):
-        with open(self.__filepath, 'w') as f:
-            f.write(self.__CommandToTemplate())
-    """
     
     def To(self):
         categolies, tpl_var_dict = TemplateVarsArgumentAnalizer(self.__tpl_var_prefix).Analize(self.__commands)
@@ -26,14 +17,17 @@ class CommandToTemplate:
         template = env.get_template(path)
         try:
             return template.render(**tpl_var_dict)
-        except jinja2.exceptions.UndefinedError as e:
+        except:
+        #except jinja2.exceptions.UndefinedError as e:
+            #print('AAAAAAAAAAAAAAAAAAAAAAAAAA')
             import traceback
             traceback.print_exc()
             self.__GetIncludeFilesCandidateMessage(categolies, env, template)
-            #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-            raise e
-            #import sys
-            #sys.exit(1)
+            #raise e
+            import sys
+            sys.exit(1)
+        #finally:
+            #print('BBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
 
     def __CommandToTemplatePath(self, categolies:list):
         input_command = ' '.join([a for a in categolies]).strip()
