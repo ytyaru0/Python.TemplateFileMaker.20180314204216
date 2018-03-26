@@ -9,13 +9,14 @@ class CopyTemplate:
         self.__commands = commands
         self.__filepath = filepath
         self.__cmdfile = CommandsFile()
+        self.__tpl_var_prefix = '-'
 
     def Copy(self):
         with open(self.__filepath, 'w') as f:
             f.write(self.__CommandToTemplate())
 
     def __CommandToTemplate(self):
-        categolies, tpl_var_dict = TemplateVarsArgumentAnalizer().Analize(self.__commands)
+        categolies, tpl_var_dict = TemplateVarsArgumentAnalizer(self.__tpl_var_prefix).Analize(self.__commands)
         path = self.__CommandToTemplatePath(categolies)
         print(str(self.__cmdfile.TemplateDir))
         print(path)
@@ -28,8 +29,6 @@ class CopyTemplate:
             traceback.print_exc()
             self.__GetIncludeFilesCandidateMessage(categolies, env, template)
             sys.exit(1)
-            #self.__GetIncludeFilesCandidateMessage(self.__cmdfile.TemplateDir, env)
-            #raise e
 
     def __CommandToTemplatePath(self, categolies:list):
         input_command = ' '.join([a for a in categolies]).strip()
@@ -50,11 +49,11 @@ class CopyTemplate:
             print('$ do', ' '.join(categolies), self.__GetExampleCommand(tpl_var_names, includes))
             print('テンプレート変数は以下のコマンドで指定します。')
             #print(tpl_var_names)
-            print(' '.join(['-'+v for v in tpl_var_names ]))
+            print(' '.join([self.__tpl_var_prefix + v for v in tpl_var_names ]))
             if 0 < len(includes):
                 print('includeするテンプレ引数とその値の候補は以下のとおり。')
                 for i in includes:
-                    print('-'+i[0], i[1])
+                    print(self.__tpl_var_prefix+i[0], i[1])
                 return includes
 
     def __GetExampleCommand(self, tpl_var_names, includes):
@@ -62,12 +61,11 @@ class CopyTemplate:
         inc_names = [i[0] for i in includes]
         for n in tpl_var_names:
             if n in inc_names: continue
-            command += '-' + n + ' A '
+            command += self.__tpl_var_prefix + n + ' A '
         for i in includes:
-            command += '-' + i[0] + ' ' + i[1][0] + ' '
+            command += self.__tpl_var_prefix + i[0] + ' ' + i[1][0] + ' '
         return command
         
-
 # -V -V -V
 # -" -V" -V
 # -K V -K V
@@ -76,10 +74,10 @@ class CopyTemplate:
 # Key: -[_a-zA-Z][_a-zA-Z0-9]。テンプレ変数名と同一。重複したら後者で上書き。
 # Value: スペースやハイフンを使うときはクォーテーションで囲む。
 class TemplateVarsArgumentAnalizer:
-    def __init__(self): pass
-
+    def __init__(self, tpl_var_prefix):
+        self.__tpl_var_prefix = tpl_var_prefix
     @property
-    def Prefix(self): return '-'
+    def Prefix(self): return self.__tpl_var_prefix
 
     # tpl_vars: shlex.split()済みで先頭に`-`がある要素以降すべて
     def Analize(self, commands:list):
@@ -193,12 +191,3 @@ if __name__ == '__main__':
     if len(sys.argv) < 3: raise Exception('起動引数エラー。コマンド文字列と出力先ファイルのフルパスをください。')
     c = CopyTemplate(sys.argv[1:-1], sys.argv[-1])
     c.Copy()
-    """
-    try:
-        c.Copy()
-        print(c.GetTemplateVars())
-    except:
-        import traceback
-        traceback.print_exec()
-    """
-
