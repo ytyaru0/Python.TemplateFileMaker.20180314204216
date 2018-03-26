@@ -1,5 +1,6 @@
 import pathlib
 import shlex
+import jinja2
 from jinja2 import Template, Environment, FileSystemLoader, meta
 from CommandsFile import CommandsFile
 
@@ -20,7 +21,15 @@ class CopyTemplate:
         print(path)
         env = Environment(loader=FileSystemLoader(str(self.__cmdfile.TemplateDir)))
         template = env.get_template(path)
-        return template.render(**tpl_var_dict)
+        try:
+            return template.render(**tpl_var_dict)
+        except jinja2.exceptions.UndefinedError as e:
+            import traceback
+            traceback.print_exc()
+            self.__GetIncludeFilesCandidateMessage(categolies, env, template)
+            sys.exit(1)
+            #self.__GetIncludeFilesCandidateMessage(self.__cmdfile.TemplateDir, env)
+            #raise e
 
     def __CommandToTemplatePath(self, categolies:list):
         input_command = ' '.join([a for a in categolies]).strip()
@@ -30,21 +39,34 @@ class CopyTemplate:
                     return d.path
         raise Exception('コマンドに対応するテンプレートファイルパスが見つかりません。\n  command=\'{}\'\n  参照ファイル:{}'.format(' '.join(self.__commands), self.__cmdfile.FilePath))
 
-    def GetTemplateVars(self):
-        categolies, tpl_var_dict = TemplateVarsArgumentAnalizer().Analize(self.__commands)
-        path = self.__CommandToTemplatePath(categolies)
-        env = Environment(loader=FileSystemLoader(str(self.__cmdfile.TemplateDir)))
-        template = env.get_template(path)
+    def __GetIncludeFilesCandidateMessage(self, categolies:list, env:jinja2.Environment, template:jinja2.Template):
         with pathlib.Path(template.filename).open() as f:
-             
-            #msg = TemplateErrorMessage(env)
-            #print(msg.Get(f.read()))
-            #includes = TemplateIncludeFiles(env).Get(f.read())
-            includes = TemplateIncludeFiles(self.__cmdfile.TemplateDir, env).Get(f.read())
-            print('INCLUDES:', includes)
+            source = f.read()
+            includes = TemplateIncludeFiles(self.__cmdfile.TemplateDir, env).Get(source)
+            #print('INCLUDES:', includes)
+            print('テンプレート変数が不足しています。')
+            print('たとえば以下のように入力してください。')
+            tpl_var_names = meta.find_undeclared_variables(env.parse(source))
+            print('$ do', ' '.join(categolies), self.__GetExampleCommand(tpl_var_names, includes))
+            print('テンプレート変数は以下のコマンドで指定します。')
+            #print(tpl_var_names)
+            print(' '.join(['-'+v for v in tpl_var_names ]))
+            if 0 < len(includes):
+                print('includeするテンプレ引数とその値の候補は以下のとおり。')
+                for i in includes:
+                    print('-'+i[0], i[1])
+                return includes
 
-            ast = env.parse(f.read())
-            return meta.find_undeclared_variables(ast)
+    def __GetExampleCommand(self, tpl_var_names, includes):
+        command = ''
+        inc_names = [i[0] for i in includes]
+        for n in tpl_var_names:
+            if n in inc_names: continue
+            command += '-' + n + ' A '
+        for i in includes:
+            command += '-' + i[0] + ' ' + i[1][0] + ' '
+        return command
+        
 
 # -V -V -V
 # -" -V" -V
@@ -100,7 +122,6 @@ class TemplateVarsArgumentAnalizer:
         if index+1 == len(tpl_vars): return True
         else: return False
 
-import jinja2
 class TemplateIncludeFiles:
     def __init__(self, tpl_dir:pathlib.Path, env:jinja2.Environment):
         self.__tpl_dir = tpl_dir
@@ -171,10 +192,13 @@ if __name__ == '__main__':
     import sys
     if len(sys.argv) < 3: raise Exception('起動引数エラー。コマンド文字列と出力先ファイルのフルパスをください。')
     c = CopyTemplate(sys.argv[1:-1], sys.argv[-1])
+    c.Copy()
+    """
     try:
         c.Copy()
         print(c.GetTemplateVars())
     except:
         import traceback
         traceback.print_exec()
+    """
 
