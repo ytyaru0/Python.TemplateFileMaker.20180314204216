@@ -45,13 +45,13 @@ class CopyTemplate:
             #print('INCLUDES:', includes)
             print('テンプレート変数が不足しています。')
             print('たとえば以下のように入力してください。')
-            tpl_var_names = meta.find_undeclared_variables(env.parse(source))
+            tpl_var_names = sorted(meta.find_undeclared_variables(env.parse(source)), key=str.lower)
             print('$ do', ' '.join(categolies), self.__GetExampleCommand(tpl_var_names, includes))
             print('テンプレート変数は以下のコマンドで指定します。')
             #print(tpl_var_names)
             print(' '.join([self.__tpl_var_prefix + v for v in tpl_var_names ]))
             if 0 < len(includes):
-                print('includeするテンプレ引数とその値の候補は以下のとおり。')
+                print('include用テンプレ引数とその値の候補は以下のとおり。')
                 for i in includes:
                     print(self.__tpl_var_prefix+i[0], i[1])
                 return includes
@@ -128,7 +128,8 @@ class TemplateIncludeFiles:
     def Get(self, source:str):
         token_gen = self.__env.lex(self.__env.preprocess(source))
         tokens = list(token_gen)
-        return self.GetIncludeCandidates(tokens, self.GetBlockContentIndices(tokens))
+        #return self.GetIncludeCandidates(tokens, self.GetBlockContentIndices(tokens))
+        return sorted(self.GetIncludeCandidates(tokens, self.GetBlockContentIndices(tokens)), key=lambda i: i[0])
            
     def GetBlockContentIndices(self, tokens):
         block_indices = []
@@ -183,7 +184,8 @@ class TemplateIncludeFiles:
         for path in self.__tpl_dir.glob(pattern):
             p = path.relative_to(pattern_full)
             values.append(str(p.parent / p.stem))
-        return values
+        #return values
+        return sorted(values)
 
 
 if __name__ == '__main__':
