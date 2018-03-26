@@ -14,22 +14,14 @@ class Do:
         parser = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
         parser.read('/tmp/work/RaspberryPi.Home.Root.20180318143826/src/_meta/path/ini/work.ini')
         self.__path_dir_target = parser['Paths']['work_flow_do']
+        pathlib.Path(self.__path_dir_target).mkdir(parents=True, exist_ok=True)
 
     def Run(self):
         name = NameGenerator(self.__path_dir_target, self.__args[0], radix=36, is_alignment=True).Generate()
         filepath = pathlib.Path(self.__path_dir_target) / (name + '.' + self.__args[0])
-        try:
-            content = CommandToTemplate(self.__args).To()
-            with filepath.open('x') as f:
-                #f.write(CommandToTemplate(self.__args).To())
-                f.write(content)
-                return str(filepath)
-        except:
-            #print('AAAAAAAAAAAAAAAAAAAAAAAA')
-            import os
-            os.remove(filepath)
-            import traceback
-            traceback.print_exc()
+        with filepath.open('x') as f:
+            f.write(CommandToTemplate(self.__args).To())
+            return str(filepath)
     
 
 if __name__ == '__main__':
