@@ -12,9 +12,8 @@ from PathIni import PathIni
 class CommandReplaceFile(ConfigFile):
     def __init__(self):
         super().__init__('command_replace')
-        self.__path = PathIni().Load()
-        self.__path_file_this = pathlib.Path(self.__path['work_meta_command_do']) / self.FilePath.name
-        self.__path_dir_template = pathlib.Path(self.__path['root_db_template']) / self.FilePath.name
+        self.__path_file_this = pathlib.Path(PathIni()['work_meta_command_do']) / self.FilePath.name
+        self.__path_dir_template = pathlib.Path(PathIni()['root_db_template']) / self.FilePath.name
 
     def Load(self):
         self.__LoadDefaultFile()
@@ -26,7 +25,7 @@ class CommandReplaceFile(ConfigFile):
 
     def __LoadDefaultFile(self):
         if not self.FilePath.is_file():
-            for p in [pathlib.Path(self.__path['root_meta_command_do']), self.DefaultFilePath]:
+            for p in [pathlib.Path(PathIni()['root_meta_command_do']), self.DefaultFilePath]:
             #for p in [self.__LoadMetaPath('root')['root_meta_command_do'], self.DefaultFilePath]:
                 if self.__Copy(p): return
             # コピーできるファイルがないなら空ファイル作成
