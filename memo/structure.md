@@ -4,44 +4,43 @@
     * python3 ~/root/script/_meta/path/IniToSh.py
     * . ~/root/script/_meta/path/sh/paths.sh
     * . setup_complete_candidate_do.sh
-* ~/root/script/
+* ~/root/
     * _meta/
         * path/
             * ini/
-                * root.ini
-                * work.ini
+                * path.ini
             * sh/
                 * paths.sh
             * IniToSh.py
         * command/
             * do/
                 * setup_complete_candidate.sh
-                * template_augs.ini
+                * command_replace.tsv
             * pj/
                 * setup_complete_candidate_pj.sh
             * repo/
                 * setup_complete_candidate_repo.sh
-    * sh/
-        * _command/
-            * do
-    * py/
-        * os/file/
-            * NameGenerator.py
-        * _command/
-            * do/
-                * TemplateMaker/
-                    * CommandReplaceFile.py
-                    * CommandsFile.py
-                    * GetCompleteCandidate.py
-                    * GetTemplateFilePath.py
-                    * PathToCommand.py
-                    * config/
-                        * command_replace.tsv
-            * pj/
-            * repo/
+    * script/
+        * sh/
+            * _command/
+                * do
+        * py/
+            * os/file/
+                * NameGenerator.py
+            * _command/
+                * do/
+                    * TemplateMaker/
+                        * CommandReplaceFile.py
+                        * CommandsFile.py
+                        * CommandToTemplate.py
+                        * ConfigFile.py
+                        * do.py
+                        * PathToCommand.py
+                * pj/
+                * repo/
 
 * ~/root/db/
-    * templates/
+    * template/
         * _command/
             * do/
                 * py/
@@ -70,6 +69,34 @@
 
 と思ったが、command_replace.tsv は手書き。自動作成できない。
 py/_command/do/ 配下にコードと一緒に配置するか。/tmp/work/.meta/ に存在しなければコピーして、そっちを読むようにする。
+
+## 名前
+
+### 複数形
+
+複数形は使わない。`templates`にすべきと思ったが、`command`も`commands`にしなければならない。libもlibrariesに, `script`も`scripts`にせねば。むしろ、すべて複数形ではないか？ 
+
+複数形にすると統一性が保てなくなる。s, esなどもそうだし、indexはindicesになる。もはや元型が崩れる。悩むので使わない。
+
+でも、`root.ini`のセクション名は`Paths`とする。`Path`は既存の環境変数名とかぶるから。shell文脈の都合により、統一できない。
+
+### erとor
+
+creater, creator, で悩む。前者は英語、後者は米語らしいが、単語によって変わったりもするらしい。統一性が保てない。すでに`NameGenerator`などで使ってしまった。
+
+クラス名やモジュール名ではよく使う。`er`, `or`をやめた名詞にすべき？`NameGenerator`は`Name`と`Generate()`にすれば解決する、か？ `NameSequencer.Generate()`とかにしたくなる。ただの名前でなくて連番名なので`SequenceName.Generate()`がいいか？
+
+http://tak-shonai.cocolog-nifty.com/crack/2013/09/-er--or-b920.html
+
+### 大文字と小文字
+
+* Linux FileSystem
+    * 区別する。設定で区別しないようにもできると思う
+* Ini (Pythonのconfigparser)
+    * Section: 区別する
+    * Key: 区別しない
+
+統一できない。
 
 # TSVファイルの必要性
 
