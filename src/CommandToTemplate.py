@@ -17,7 +17,7 @@ class CommandToTemplate:
         env = Environment(loader=FileSystemLoader(str(self.__cmdfile.TemplateDir)))
         template = env.get_template(path)
         template.globals['now'] = datetime.datetime.now()
-        TemplateVarsErrorChecker(tpl_var_dict, template).IsExists()
+        TemplateVarsErrorChecker(self.__tpl_var_prefix, tpl_var_dict, env, template).IsExists()
         try:
             return template.render(**tpl_var_dict)
         except:
@@ -67,27 +67,33 @@ class CommandToTemplate:
         
 
 class TemplateVarsErrorChecker:
-    def __init__(self, tpl_var_dict, template):
+    def __init__(self, prefix, tpl_var_dict, env, template):
+        self.__prefix = prefix
         self.__tpl_var_dict = tpl_var_dict
+        self.__env = env
         self.__template = template
+        self.__tpl_var_names = None
         self.__LoadTemplateVars()
-        #self.__tpl_var_names = None
 
     def __LoadTemplateVars(self):
         if self.__tpl_var_names is not None: return
         with pathlib.Path(self.__template.filename).open() as f:
             source = f.read()
-            self.__tpl_var_names = sorted(jinja2.meta.find_undeclared_variables(env.parse(source)), key=str.lower)
+            self.__tpl_var_names = sorted(jinja2.meta.find_undeclared_variables(self.__env.parse(source)), key=str.lower)
 
     def IsExists(self):
         not_exists = []
-        for key in self.__tpl_var_dict:
-            if key not in self.__tpl_var_names: not_exists.append(key)
+        if 0 == len(self.__tpl_var_dict.keys()): not_exists = list(self.__tpl_var_names)
+        else:
+            for key in self.__tpl_var_names:
+                if key not in self.__tpl_var_dict.keys(): not_exists.append(key)
+        #for key in self.__tpl_var_dict:
+        #    if key not in self.__tpl_var_names: not_exists.append(key)
         if 0 < len(not_exists):
-            msg = '以下のテンプレート変数が不足しています。\n{}\n'.format(not_exists)
+            msg = '以下のテンプレート変数が不足しています。\n{}'.format(not_exists)
             for key in not_exists:
-                if key.startswith(self.__prefix) and key[len(self.__prefix):].isdigit():
-                    msg += '\n' + self.__GetPositionalVarsHelp()
+                if key.startswith('_') and key[len(self.__prefix):].isdigit():
+                    msg += '\n\n' + self.__GetPositionalVarsHelp()
                     break
             #raise Exception(msg)
             #raise TemplateVarsErrorChecker.NotExistTemplateVars(msg)
@@ -100,7 +106,7 @@ class TemplateVarsErrorChecker:
         msg += '  $ do py -MyClass\n'
         msg += '  以下のように変数名を入力せず値だけで済むため少し楽です。\n'
         msg += '  $ do py -_0 MyClass\n'
-        msg += '  $ do py -ClassName MyClass\n'
+        msg += '  $ do py -ClassName MyClass'
         return msg
 
     class NotExistTemplateVars(Exception): pass
