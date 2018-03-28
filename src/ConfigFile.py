@@ -3,8 +3,6 @@ import os.path
 import csv
 import sys
 sys.path.append(os.path.expanduser('~/root/_meta/path/'))
-#/tmp/work/RaspberryPi.Home.Root.20180318143826/src/_meta/path/PathIni.py
-#~/root/_meta/path/PathIni.py
 from PathIni import PathIni
 
 class ConfigFile:

@@ -1,4 +1,3 @@
-
 # doコマンドのサブコマンド候補と入力補完をする
 #   https://qiita.com/sosuke/items/06b64068155ae4f8a853
 #   COMP_CWORD	補完対象の引数の番号

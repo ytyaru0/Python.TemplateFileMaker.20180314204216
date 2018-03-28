@@ -3,6 +3,7 @@ import os.path
 from io import StringIO
 from PathToCommand import PathToCommand
 from ConfigFile import ConfigFile
+
 class CommandsFile(ConfigFile):
     def __init__(self):
         super().__init__('commands')

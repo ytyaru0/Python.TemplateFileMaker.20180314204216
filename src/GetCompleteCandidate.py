@@ -1,6 +1,7 @@
 import pathlib
 import os.path
 from CommandsFile import CommandsFile 
+
 class GetCompleteCandidate:
     def __init__(self, root_command):
         self.__root_command = root_command
