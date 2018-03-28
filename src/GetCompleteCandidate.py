@@ -19,17 +19,11 @@ class GetCompleteCandidate:
     # 現在の階層における候補リストを返す
     def __GetCandidate(self, datas):
         candidate = []
-        #del_root_cmd = self.__comp_line.replace(self.__root_command, '').lstrip()
-        #comp_lines = shlex.split(self.__comp_line)
-        #if comp_lines[0] == self.__root_command: del_root_cmd = ' '.join(comp_lines[1:])
-        #else: del_root_cmd = ' '.join(comp_line)
-        #if ' ' == self.__comp_line[-1]: del_root_cmd += ' '
         del_root_cmd = self.__DelRootCmd(self.__comp_line)
         for d in datas:
             for c in d.commands:
                 if self.__comp_line.endswith(' '):
-                    #if not c.startswith(del_root_cmd): continue
-                    if 0 < len(del_root_cmd) and not c.startswith(del_root_cmd): continue
+                    if not c.startswith(del_root_cmd): continue
                     cand = c.replace(del_root_cmd, '').strip().split(' ')[0]
                 else:
                     fix_cmd = ' '.join(del_root_cmd.split(' ')[:-1]) + ' '
@@ -43,14 +37,9 @@ class GetCompleteCandidate:
     def __DelRootCmd(self, command:str):
         res = ''
         commands = shlex.split(command.lstrip())
-        #print(commands[0] == self.__root_command)
-        #if 1 < len(commands) and commands[0] == self.__root_command: res = ' '.join(commands[1:])
         if commands[0] == self.__root_command: res = ' '.join(commands[1:])
         else: res = ' '.join(commands)
-        #if ' ' == command[-1]: res += ' '
-        #print('********{}'.format(res))
         return res
-
 
 
 if __name__ == '__main__':
