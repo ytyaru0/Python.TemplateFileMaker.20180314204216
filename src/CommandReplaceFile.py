@@ -32,4 +32,4 @@ class CommandReplaceFile(ConfigFile):
         if filepath.is_file():
             shutil.copyfile(filepath, self.FilePath)
             return True
-        return Falseimport pathlib
+        return False
