@@ -3,6 +3,7 @@ import shlex
 import jinja2
 from jinja2 import Template, Environment, FileSystemLoader, meta
 from CommandsFile import CommandsFile
+import datetime
 
 class CommandToTemplate:
     def __init__(self, commands:list):
@@ -15,6 +16,8 @@ class CommandToTemplate:
         path = self.__CommandToTemplatePath(categolies)
         env = Environment(loader=FileSystemLoader(str(self.__cmdfile.TemplateDir)))
         template = env.get_template(path)
+        template.globals['now'] = datetime.datetime.now()
+        TemplateVarsErrorChecker(tpl_var_dict, template).IsExists()
         try:
             return template.render(**tpl_var_dict)
         except:
@@ -62,6 +65,48 @@ class CommandToTemplate:
             command += self.__tpl_var_prefix + i[0] + ' ' + i[1][0] + ' '
         return command
         
+
+class TemplateVarsErrorChecker:
+    def __init__(self, tpl_var_dict, template):
+        self.__tpl_var_dict = tpl_var_dict
+        self.__template = template
+        self.__LoadTemplateVars()
+        #self.__tpl_var_names = None
+
+    def __LoadTemplateVars(self):
+        if self.__tpl_var_names is not None: return
+        with pathlib.Path(self.__template.filename).open() as f:
+            source = f.read()
+            self.__tpl_var_names = sorted(jinja2.meta.find_undeclared_variables(env.parse(source)), key=str.lower)
+
+    def IsExists(self):
+        not_exists = []
+        for key in self.__tpl_var_dict:
+            if key not in self.__tpl_var_names: not_exists.append(key)
+        if 0 < len(not_exists):
+            msg = '以下のテンプレート変数が不足しています。\n{}\n'.format(not_exists)
+            for key in not_exists:
+                if key.startswith(self.__prefix) and key[len(self.__prefix):].isdigit():
+                    msg += '\n' + self.__GetPositionalVarsHelp()
+                    break
+            #raise Exception(msg)
+            #raise TemplateVarsErrorChecker.NotExistTemplateVars(msg)
+            raise self.NotExistTemplateVars(msg)
+
+    def __GetPositionalVarsHelp(self):
+        msg = '位置引数について\n\n'
+        msg += '  "_数値" の名前のテンプレ変数は、位置引数です。テンプレ変数をコマンドで指定開始した位置が自動的に名前になります。\n'
+        msg += '  たとえば以下のようにすると、テンプレ変数"_0"に"MyClass"をセットしたことになります。\n'
+        msg += '  $ do py -MyClass\n'
+        msg += '  以下のように変数名を入力せず値だけで済むため少し楽です。\n'
+        msg += '  $ do py -_0 MyClass\n'
+        msg += '  $ do py -ClassName MyClass\n'
+        return msg
+
+    class NotExistTemplateVars(Exception): pass
+
+
+
 # -V -V -V
 # -" -V" -V
 # -K V -K V
@@ -92,7 +137,7 @@ class TemplateVarsArgumentAnalizer:
         position = 0 # 位置引数カウンタ
         for i, v in enumerate(tpl_vars):
             if self.IsPositional(tpl_vars, i):
-                tpl_var_dict[str(i)] = self.UnQuote(v[1:])
+                tpl_var_dict['_'+str(i)] = self.UnQuote(v[1:])
                 position += 1
             else:
                 if not self.IsLast(tpl_vars, i):

@@ -1,5 +1,5 @@
 {% import "md/meta_yaml_blog.md" as meta %}
-{{ meta.put(Title=Title, Author='ytyaru', Date=Date, CSS='index.css') }}
+{{ meta.put(Title=Title, Author='ytyaru', CSS='index.css') }}
 
 {{ Desctiption }}
 

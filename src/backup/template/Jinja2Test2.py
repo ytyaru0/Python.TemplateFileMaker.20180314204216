@@ -4,8 +4,10 @@ import datetime
 
 path_tpl = (pathlib.Path(__file__).parent.parent.parent.parent / 'res').resolve()
 env = Environment(loader=FileSystemLoader(str(path_tpl )))
+#template = env.get_template('py/_DEFAULT.py')
 template = env.get_template('md/artifact_1.md')
-print(template.render(now=datetime.datetime.now(), Desctiption="説明文。", RepoUrl='http://', e='ras_py', l='CC0-1.0'))
+print(template.render(RepoUrl='http://', e='ras_py', l='CC0-1.0'))
+#print(template.render(Desctiption="説明文。", RepoUrl='http://', e='ras_py', l='CC0-1.0'))
 
 template = env.get_template('md/artifact_2.md')
 template.globals['now'] = datetime.datetime.now()

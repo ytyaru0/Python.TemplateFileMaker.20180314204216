@@ -1,4 +1,4 @@
-class {{ Name }}:
+class {{ _0 }}:
     def __init__(self):
         pass
 
@@ -7,5 +7,5 @@ class {{ Name }}:
 
 
 if __name__ == '__main__':
-    c = {{ Name }}()
+    c = {{ _0 }}()
     c.Run()
