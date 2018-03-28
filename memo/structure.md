@@ -35,6 +35,7 @@
                         * CommandToTemplate.py
                         * ConfigFile.py
                         * do.py
+                        * GetCompleteCandidate.py
                         * PathToCommand.py
                 * pj/
                 * repo/

@@ -3,7 +3,10 @@
 #   COMP_CWORD	補完対象の引数の番号
 #   COMP_LINE	コマンドライン全体の文字
 #   COMP_POINT	カーソルの位置
-command=do
+
+# doは予約語だったのでyに変更。"do"とすれば呼び出せるが冗長。
+#command=do
+command=y
 SetupComplete()
 {
     local cur=${COMP_WORDS[COMP_CWORD]}
