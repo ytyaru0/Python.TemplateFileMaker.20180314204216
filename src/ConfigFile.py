@@ -31,6 +31,10 @@ class ConfigFile:
     def __LoadTemplateDir(self):
         self.__path_dir_template = pathlib.Path(PathIni()['root_db_template']) / self.__file_name
         if not self.__path_dir_template.is_dir():
+            self.__path_dir_template = pathlib.Path('/tmp/work/Python.TemplateFileMaker.20180314204216/res')
+        if not self.__path_dir_template.is_dir():
+            self.__path_dir_template = pathlib.Path('/tmp/work/.meta/command/do/template/')
+        if not self.__path_dir_template.is_dir():
             self.__path_dir_template = self.__path_dir_res
 
     def __GetDefaultPath(self):

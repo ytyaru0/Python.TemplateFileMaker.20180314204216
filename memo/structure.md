@@ -57,20 +57,106 @@
             * commands.tsv
             * command_replace.tsv
 
+* /tmp/work/Python.TemplateFileMaker.20180314204216/res/
+    * (テンプレート配置)
 
-/tmp/work/.meta/_command/do/ 配下にコマンドファイルを作成する。
-テンプレートファイルがあるディレクトリを捜査し、初回のみ作成する。
-更新したいときはcommands.tsv、command_replace.tsvのファイルを削除すること。
+## RAM Disk
 
-なお、/tmp/はRAMディスクとする。
+`/tmp/`はRAMディスクとする。
 テンプレートが追加されるなどの変更があっても、tsvファイルの変更はメモリ上で保持される。SDカードやSSDへの書込は生じない。
 
+### commands.tsv
 
+`/tmp/work/.meta/_command/do/`配下にcommands.tsvを作成する。
+commands.tsvはテンプレートファイルがあるディレクトリを捜査し、初回のみ作成する。
+更新したいときはcommands.tsv、command_replace.tsvのファイルを削除してからdoコマンドを実行すること。
 
-と思ったが、command_replace.tsv は手書き。自動作成できない。
-py/_command/do/ 配下にコードと一緒に配置するか。/tmp/work/.meta/ に存在しなければコピーして、そっちを読むようにする。
+### command_replace.tsv
+
+command_replace.tsv は手書き。自動作成できない。
+`~/root/_meta/command/do/`配下に配置する。`/tmp/work/.meta/`に存在しなければそこへコピーし、そちらを読むようにする。一時的に変更したいとき、RAM Disk上でできる。
+
+### テンプレート
+
+`~/root/db/template`に配置する予定だが、まだディレクトリすら作成しない。
+
+テンプレは日々加筆、修正することが予想される。完成するまではRAMディスクで読み書きpushしていきたい。
+
+そこで、当面は以下のリポジトリ配下のディレクトリを使う。
+
+* /tmp/work/Python.TemplateFileMaker.20180314204216/res/
+
+## Python
+
+doコマンドはshellでなくPython主体で実装されている。
+
+よって、実行前にはPython設定スクリプトが必要。
+
+* /tmp/work/RaspberryPi.Home.Root.20180318143826/src/script/sh/_called/bash/bashrc.sh
+
+```sh
+# 時刻同期できない問題: .bash_profileだとログイン後に自動実行されるが時刻同期されず。一時ファイルだけが作成されて以降実行されなくなってしまう。
+. "$HOME/root/script/sh/_lib/env.sh"
+ExportPath "$HOME/root/tool" "$HOME/root/script/sh/_command"
+. ~/root/script/sh/mkdir_work.sh
+~/root/script/sh/call_settime.sh
+. ~/root/script/sh/pyenv.sh
+. ~/root/script/sh/py_venv.sh
+
+# ユーザパス設定読込
+python3 /tmp/work/RaspberryPi.Home.Root.20180318143826/src/_meta/path/IniToSh.py
+. /tmp/work/RaspberryPi.Home.Root.20180318143826/src/_meta/path/sh/paths.sh
+#python3 ~/root/_meta/path/IniToSh.py
+#. ~/root/_meta/path/sh/paths.sh
+
+# コマンドの引数補完セット
+. /tmp/work/RaspberryPi.Home.Root.20180318143826/src/_meta/command/do/setup_complete_candidate_do.sh
+#. /tmp/work/Python.TemplateFileMaker.20180314204216/src/setup_complete_candidate_do.sh
+#. ~/root/_meta/command/setup_complete_candidate_do.sh
+```
+
+### テンプレートエンジン
+
+jinja2を使う。これに伴い、doコマンド実行には仮想環境のactivateが必要。
+
+* `~/root/env/py/template/bin/activate`
+
+doコマンドスクリプト内で呼び出す。
+
+* ~/root/script/sh/_command/do
+* /tmp/work/RaspberryPi.Home.Root.20180318143826/src/script/sh/_command/do
+
+```sh
+#!/bin/bash
+# やってみるコマンド。単一ファイルを/tmp/work/flow/do/に配置する
+# $1: ext (.py, .sh, .md, .html, .js, .cs, ...)
+# $2..: context (cui, gui, http, server)
+#       template-vars (テンプレ変数)
+
+[ $# -lt 1 ] && { echo "引数不足です。ファイル拡張子をください。"; exit 1; }
+
+# jinja2がある仮想環境を有効化
+. ~/root/script/sh/pyenv.sh
+. ~/root/env/py/template/bin/activate
+
+# テンプレファイルを作成する
+pyscript="/tmp/work/Python.TemplateFileMaker.20180314204216/src/do.py"
+#pyscript="~/root/script/py/_command/do/do.py"
+filepath=`python3 "${pyscript}" "$@"`
+
+# 成功すればエディタで開く
+if [ -f "$filepath" ]; then
+    [ -z "$editor" ] && [ "${editor:-A}" = "${editor-A}" ] && editor='vim'
+    "$editor" "$filepath"
+else
+    # 失敗ならエラーを表示する（テンプレ変数の説明等）
+    echo "$filepath"
+fi
+```
 
 ## 名前
+
+ファイル、ディレクトリ、セクション、キー、変数などの名前をどうするか。
 
 ### 複数形
 
@@ -112,33 +198,4 @@ RAMディスクに配置したら、doコマンド初回利用時にのみ実行
 冗長なコマンドを置き換える。
 
 ファイルの分類を最適化するためにディレクトリ構造やファイル名を定める。だが、コマンド入力時、その構造そのままだと都合が悪いことがある。冗長など。
-
-# TSVファイル設定
-
-config.ini
-
-```ini
-[file]
-paths=
-    /tmp/work/.meta/_command/do
-    ./config
-```
-
-```python
-import configparser
-p = configparser.ConfigParser()
-p.read('config.ini')
-print(p['file']['paths'].split('\n'))
-
-paths = filter(lambda line: line is not None and 0 < len(line.strip()), p['file']['paths'].split('\n')) 
-print(list(paths))
-```
-
-config.yml
-
-```yml
-path:
-    - /tmp/work/.meta/_command/do/
-    - ./config/
-```
 
