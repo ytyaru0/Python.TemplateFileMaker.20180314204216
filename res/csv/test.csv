@@ -1,0 +1,3 @@
+{%- import "csv/from_list.macro" as csv -%}
+{{ csv.To(['A', 'BB', 'CCC']) }}
+{{ csv.To(['D', 'EE', 'FFF']) }}

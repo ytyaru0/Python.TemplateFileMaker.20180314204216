@@ -1,0 +1,5 @@
+{%- macro To(args) %}
+{%- for a in args -%}
+{{ a }}{% if loop.index0+1 < loop.length %}, {% endif %}
+{%- endfor %}
+{%- endmacro %}
