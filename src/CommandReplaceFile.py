@@ -23,7 +23,7 @@ class CommandReplaceFile(ConfigFile):
 
     def __LoadDefaultFile(self):
         if not self.FilePath.is_file():
-            for p in [pathlib.Path(PathIni()['root_meta_command_do']), self.DefaultFilePath]:
+            for p in [pathlib.Path(PathIni()['root_meta_command_do']) / self.FilePath.name, self.DefaultFilePath]:
                 if self.__Copy(p): return
             # コピーできるファイルがないなら空ファイル作成
             with self.FilePath.open('x'): pass

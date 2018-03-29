@@ -11,6 +11,7 @@ SetupComplete()
 {
     local cur=${COMP_WORDS[COMP_CWORD]}
     pyscript="/tmp/work/Python.TemplateFileMaker.20180314204216/src/GetCompleteCandidate.py"
+    #pyscript="$HOME/root/script/py/_command/do/GetCompleteCandidate.py"
     #echo "ECHO CWORD: $COMP_CWORD"
     #echo "ECHO LINE: $COMP_LINE"
     #echo "ECHO POINT: $COMP_POINT"
