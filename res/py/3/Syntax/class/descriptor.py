@@ -6,6 +6,9 @@ class Descriptor:
         print('SET'); self.val = value;
     def __delete__(self, obj):
         print('DEL'); del obj;
+    def __set_name__(self, owner, name):
+        print('NAME:', name);
+        self.name = name
 
 class A:
     v = Descriptor()
