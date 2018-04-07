@@ -27,7 +27,7 @@ class ConfigFile:
         self.__path_file_this.parent.mkdir(parents=True, exist_ok=True)
 
     def __LoadTemplateDir(self):
-        self.__path_dir_template = pathlib.Path(PathIni()['root_db_template']) / self.__file_name
+        self.__path_dir_template = pathlib.Path(PathIni()['root_db_template_command_do']) / self.__file_name
         if not self.__path_dir_template.is_dir():
             self.__path_dir_template = pathlib.Path('/tmp/work/Python.TemplateFileMaker.20180314204216/res')
         if not self.__path_dir_template.is_dir():
